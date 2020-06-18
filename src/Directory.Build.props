@@ -1,0 +1,12 @@
+<Project>
+
+  <Import Project="$(MSBuildThisFileDirectory)../Directory.Build.props" />
+  
+  <PropertyGroup>
+    <Version>$(PhpUnitVersion)</Version>
+    <PackageVersion>$(PhpUnitVersion)</PackageVersion>
+    <PackageOutputPath>$(MSBuildThisFileDirectory)../nupkg</PackageOutputPath>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+</Project>

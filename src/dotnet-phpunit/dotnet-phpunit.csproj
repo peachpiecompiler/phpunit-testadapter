@@ -6,7 +6,6 @@
     <RootNamespace>DotnetPhpUnit</RootNamespace>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>dotnet-phpunit</ToolCommandName>
-    <PackageOutputPath>../../nupkg</PackageOutputPath>
   </PropertyGroup>
 
   <ItemGroup>

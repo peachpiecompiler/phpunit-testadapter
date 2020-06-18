@@ -2,8 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <PackageOutputPath>../../nupkg</PackageOutputPath>
-    <Version>9.2.3</Version>
   </PropertyGroup>
 
   <ItemGroup>
