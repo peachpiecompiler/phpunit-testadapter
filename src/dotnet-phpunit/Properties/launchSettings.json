@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "dotnet-phpunit": {
+      "commandName": "Project",
+      "commandLineArgs": "obj/Debug/netstandard2.0/Lib.dll --bootstrap src/Email.php tests/EmailTest.php",
+      "workingDirectory": "../../samples/Lib"
+    }
+  }
+}

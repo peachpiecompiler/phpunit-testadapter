@@ -1,0 +1,42 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29911.84
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dotnet-phpunit", "src\dotnet-phpunit\dotnet-phpunit.csproj", "{82009126-14D0-4518-A424-70D6109F2FC3}"
+EndProject
+Project("{13B669BE-BB05-4DDF-9536-439F39A36129}") = "PhpUnit", "src\PhpUnit\PhpUnit.msbuildproj", "{EE7AC928-31FD-4ABF-A69B-E5F992B183AF}"
+EndProject
+Project("{13B669BE-BB05-4DDF-9536-439F39A36129}") = "Lib", "samples\Lib\Lib.msbuildproj", "{1C3E0802-1C80-44E2-9609-1DBCD2A0366A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{4BAA7A9F-4A8C-4AD5-9842-61DAA740A871}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{82009126-14D0-4518-A424-70D6109F2FC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82009126-14D0-4518-A424-70D6109F2FC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82009126-14D0-4518-A424-70D6109F2FC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82009126-14D0-4518-A424-70D6109F2FC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE7AC928-31FD-4ABF-A69B-E5F992B183AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE7AC928-31FD-4ABF-A69B-E5F992B183AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE7AC928-31FD-4ABF-A69B-E5F992B183AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE7AC928-31FD-4ABF-A69B-E5F992B183AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C3E0802-1C80-44E2-9609-1DBCD2A0366A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C3E0802-1C80-44E2-9609-1DBCD2A0366A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C3E0802-1C80-44E2-9609-1DBCD2A0366A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C3E0802-1C80-44E2-9609-1DBCD2A0366A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1C3E0802-1C80-44E2-9609-1DBCD2A0366A} = {4BAA7A9F-4A8C-4AD5-9842-61DAA740A871}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B0B9A220-9D97-4BB4-AF7E-9756E6643EF8}
+	EndGlobalSection
+EndGlobal

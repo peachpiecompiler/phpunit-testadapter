@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>DotnetPhpUnit</RootNamespace>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>dotnet-phpunit</ToolCommandName>
+    <PackageOutputPath>../../nupkg</PackageOutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../PhpUnit/PhpUnit.msbuildproj" />
+  </ItemGroup>
+
+</Project>
