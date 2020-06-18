@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../PhpUnit/PhpUnit.msbuildproj" />
+    <ProjectReference Include="../Peachpied.PhpUnit/Peachpied.PhpUnit.msbuildproj" />
   </ItemGroup>
 
 </Project>

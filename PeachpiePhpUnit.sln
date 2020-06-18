@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29911.84
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dotnet-phpunit", "src\dotnet-phpunit\dotnet-phpunit.csproj", "{82009126-14D0-4518-A424-70D6109F2FC3}"
 EndProject
-Project("{13B669BE-BB05-4DDF-9536-439F39A36129}") = "PhpUnit", "src\PhpUnit\PhpUnit.msbuildproj", "{EE7AC928-31FD-4ABF-A69B-E5F992B183AF}"
+Project("{13B669BE-BB05-4DDF-9536-439F39A36129}") = "Peachpied.PhpUnit", "src\Peachpied.PhpUnit\Peachpied.PhpUnit.msbuildproj", "{EE7AC928-31FD-4ABF-A69B-E5F992B183AF}"
 EndProject
 Project("{13B669BE-BB05-4DDF-9536-439F39A36129}") = "Lib", "samples\Lib\Lib.msbuildproj", "{1C3E0802-1C80-44E2-9609-1DBCD2A0366A}"
 EndProject
