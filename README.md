@@ -21,13 +21,14 @@ To test it, run the following commands in the directory `samples/LibNuget`:
 ```
 dotnet tool install --global dotnet-phpunit
 dotnet build
-dotnet phpunit obj/Debug/netstandard2.0/LibNuget.dll --bootstrap src/Email.php tests/EmailTest.php
+dotnet phpunit --bootstrap src/Email.php tests/EmailTest.php
 ```
 
 It should run PHPUnit with the output similar to this one:
 ```
 Runner of PHPUnit (© Sebastian Bergmann) on PHP assemblies compiled by Peachpie
 
+Building "C:\repos\peachpie-phpunit\samples\LibNuget\LibNuget.msbuildproj"...
 Opening assembly "C:\repos\peachpie-phpunit\samples\LibNuget\obj\Debug\netstandard2.0\LibNuget.dll"...
 Assembly loaded
 
@@ -40,7 +41,13 @@ Time: 00:00.696, Memory: 39.29 KB
 OK (3 tests, 3 assertions)
 ```
 
-If you wish to remove `dotnet-phpunit` after using it this way, run:
+To explicitly disable building of the project (as it's already built), pass the `--no-build` option to `dotnet phunit`, e.g.:
+
+```
+dotnet phpunit --no-build --bootstrap src/Email.php tests/EmailTest.php
+```
+
+If you wish to remove `dotnet-phpunit` from the set of installed tools, run:
 
 ```
 dotnet tool uninstall --global dotnet-phpunit
