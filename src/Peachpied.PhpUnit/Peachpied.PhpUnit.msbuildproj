@@ -6,8 +6,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="*.phar" />
     <None Include="LICENSE.txt" Pack="true" PackagePath=""/>
   </ItemGroup>
+
+  <Target Name="DownloadPhpUnit" BeforeTargets="CoreCompile">
+    <DownloadFile
+      SourceUrl="https://phar.phpunit.de/phpunit-$(PhpUnitVersion).phar"
+      DestinationFolder="$(MSBuildThisFileDirectory)"
+      DestinationFileName="phpunit.phar">
+      <Output TaskParameter="DownloadedFile" ItemName="Compile" />
+    </DownloadFile>
+  </Target>
 
 </Project>
