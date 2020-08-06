@@ -11,6 +11,8 @@ Project("{13B669BE-BB05-4DDF-9536-439F39A36129}") = "Lib", "samples\Lib\Lib.msbu
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{4BAA7A9F-4A8C-4AD5-9842-61DAA740A871}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Peachpied.PhpUnit.TestAdapter", "src\Peachpied.PhpUnit.TestAdapter\Peachpied.PhpUnit.TestAdapter.csproj", "{D60B740C-3C98-4519-90DC-1B91239C5623}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,10 @@ Global
 		{1C3E0802-1C80-44E2-9609-1DBCD2A0366A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C3E0802-1C80-44E2-9609-1DBCD2A0366A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C3E0802-1C80-44E2-9609-1DBCD2A0366A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D60B740C-3C98-4519-90DC-1B91239C5623}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D60B740C-3C98-4519-90DC-1B91239C5623}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D60B740C-3C98-4519-90DC-1B91239C5623}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D60B740C-3C98-4519-90DC-1B91239C5623}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
