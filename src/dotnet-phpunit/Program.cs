@@ -64,9 +64,19 @@ namespace DotnetPhpUnit
             // Locate the current instance of MSBuild
             var vsInstance = MSBuildLocator.RegisterDefaults();
 
-            // Explicitly load the JSON library in order for Microsoft.Build.NuGetSdkResolver to work
-            string jsonLib = Path.Combine(vsInstance.MSBuildPath, "Newtonsoft.Json.dll");
-            Assembly.LoadFrom(jsonLib);
+            // Set up assembly loading mechanism to consider the assemblies in the MSBuild folder
+            AppDomain.CurrentDomain.AssemblyResolve +=
+                (trg, args) => TryResolveAssembly(vsInstance.MSBuildPath, args.Name ?? throw new ArgumentNullException());
+        }
+
+        private static Assembly? TryResolveAssembly(string msbuildPath, string assemblyName)
+        {
+            // "MyAssembly, ..." => "MyAssembly.dll"
+            string fileName = assemblyName.Substring(0, assemblyName.IndexOf(',')) + ".dll";
+
+            // Load the given assembly from the MSBuild path if it exists
+            string expectedPath = Path.Combine(msbuildPath, fileName);
+            return File.Exists(expectedPath) ? Assembly.LoadFrom(expectedPath) : null;
         }
 
         private static void ExtractDotNetArgs(ref string[] args, out bool buildProject)
