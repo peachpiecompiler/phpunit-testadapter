@@ -117,7 +117,7 @@ namespace DotnetPhpUnit
         {
             // Read the final assembly destination using MSBuild
             var project = new Project(projectFullPath);
-            string path = project.GetPropertyValue("OutDir") + project.GetPropertyValue("TargetName") + project.GetPropertyValue("TargetExt");
+            string path = Path.Combine(project.GetPropertyValue("OutDir"), project.GetPropertyValue("TargetName") + project.GetPropertyValue("TargetExt"));
             return Path.GetFullPath(path);
         }
 
@@ -143,26 +143,16 @@ namespace DotnetPhpUnit
             // Initialize PHP context with the current root directory and console output
             using var ctx = Context.CreateConsole(PharName, args);
 
-            // TODO: Clean up the following hack if possible:
+            // Set $_SERVER['SCRIPT_NAME'] to be different from __FILE__ so that it NEVER executes
+            // (there is the condition for execution __FILE__ === realpath($_SERVER['SCRIPT_NAME']) in PHPUnit PHAR entry file)
+            ctx.Server[CommonPhpArrayKeys.SCRIPT_NAME] = "__DUMMY_INVALID_FILE";
 
-            // Try to run PHPUnit from the main entry point in PHAR. Due to the following condition in the PHAR loader
-            //
-            // if (__FILE__ === realpath($_SERVER['SCRIPT_NAME'])) { ... }
-            //
-            // it doesn't call Command.main unless a file named "phpunit.phar" is present in the current folder,
-            // but it will at least include all the files containing class definitions.
+            // Run the PHAR entry point so that all the classes are included
             var pharLoader = Context.TryGetDeclaredScript(PharName);
-            int exitCode = RunScript(ctx, () => pharLoader.Evaluate(ctx, PhpArray.NewEmpty(), null).ToInt());
-            if (PhpPath.realpath(ctx, PharName) != null)
-            {
-                // It has already run, just return the exit code
-                return exitCode;
-            }
-            else
-            {
-                // It hasn't properly run yet, ignore the previous exit code and re-run directly
-                return RunScript(ctx, () => (int)Command.main(ctx, PhpTypeInfoExtension.GetPhpTypeInfo<Command>()));
-            }
+            RunScript(ctx, () => pharLoader.Evaluate(ctx, PhpArray.NewEmpty(), null).ToInt());
+
+            // Run the tests themselves
+            return RunScript(ctx, () => (int)Command.main(ctx, PhpTypeInfoExtension.GetPhpTypeInfo<Command>()));
         }
 
         private static int RunScript(Context ctx, Func<int> callback)
