@@ -22,16 +22,17 @@ namespace Peachpied.PhpUnit.TestAdapter
         private readonly Context _phpContext;
 
         private readonly ImmutableArray<string> _sources;
-        private ImmutableDictionary<VsTestCase, PuTestCase> _lazyTestMap;
+        private ImmutableArray<VsTestCase> _lazyVsTestCases;
+        private ImmutableDictionary<string, PuTestCase> _lazyTestMap;
 
         static PhpUnitContext()
         {
             Context.AddScriptReference(typeof(PuTestCase).Assembly);
         }
 
-        public PhpUnitContext(IEnumerable<string> sources = null)
+        public PhpUnitContext(IEnumerable<string> sources)
         {
-            _sources = sources?.ToImmutableArray() ?? ImmutableArray<string>.Empty;
+            _sources = sources.ToImmutableArray();
 
             _phpContext = Context.CreateEmpty();
             _phpContext.WorkingDirectory = _phpContext.RootPath = EnvironmentHelper.ProjectDirectory;
@@ -53,9 +54,9 @@ namespace Peachpied.PhpUnit.TestAdapter
             }
         }
 
-        private void EnsureTestMap()
+        private void EnsureTests()
         {
-            if (_lazyTestMap == null)
+            if (_lazyVsTestCases.IsDefault || _lazyTestMap == null)
             {
                 var testLoader = new StandardTestSuiteLoader(_phpContext);
                 var testRunner = new TestRunner(_phpContext, testLoader);
@@ -63,7 +64,8 @@ namespace Peachpied.PhpUnit.TestAdapter
                 var testSuite = testRunner.getTest("tests");
                 var puTestSuites = testSuite.tests().Values.OfType<PuTestSuite>();
 
-                var mapBuilder = ImmutableDictionary.CreateBuilder<VsTestCase, PuTestCase>();
+                var vsTestCaseBuilder = ImmutableArray.CreateBuilder<VsTestCase>();
+                var mapBuilder = ImmutableDictionary.CreateBuilder<string, PuTestCase>();
                 foreach (var puTestSuite in puTestSuites)
                 {
                     var puTests = puTestSuite.tests().Values.OfType<PuTestCase>();
@@ -71,28 +73,33 @@ namespace Peachpied.PhpUnit.TestAdapter
                     {
                         // TODO: Provide more detailed information
 
-                        var vsTest = new VsTestCase(puTest.getName(), PhpUnitTestExecutor.ExecutorUri, _sources.FirstOrDefault() ?? "");
-                        mapBuilder.Add(vsTest, puTest);
+                        string name = puTestSuite.getName() + "." + puTest.getName();
+                        var vsTest = new VsTestCase(name, PhpUnitTestExecutor.ExecutorUri, _sources.FirstOrDefault() ?? "");
+                        vsTestCaseBuilder.Add(vsTest);
+                        mapBuilder.Add(name, puTest);
                     }
                 }
 
+                _lazyVsTestCases = vsTestCaseBuilder.ToImmutable();
                 _lazyTestMap = mapBuilder.ToImmutable();
             }
         }
 
         public IEnumerable<VsTestCase> FindTestCases()
         {
-            EnsureTestMap();
-            return _lazyTestMap.Keys;
+            EnsureTests();
+            return _lazyVsTestCases;
         }
 
         public void RunTests(IEnumerable<VsTestCase> vsTests, IFrameworkHandle frameworkHandle)
         {
-            EnsureTestMap();
+            EnsureTests();
 
             foreach (var vsTest in vsTests)
             {
-                var puTest = _lazyTestMap[vsTest];
+                frameworkHandle.RecordStart(vsTest);
+
+                var puTest = _lazyTestMap[vsTest.FullyQualifiedName];
                 var puResult = puTest.run();
 
                 var vsResult = new VsTestResult(vsTest);
