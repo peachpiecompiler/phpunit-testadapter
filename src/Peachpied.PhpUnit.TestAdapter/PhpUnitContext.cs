@@ -73,7 +73,7 @@ namespace Peachpied.PhpUnit.TestAdapter
                     {
                         // TODO: Provide more detailed information
 
-                        string name = puTestSuite.getName() + "." + puTest.getName();
+                        string name = PhpUnitHelper.GetTestNameFromPhp(puTestSuite.getName(), puTest.getName());
                         var vsTest = new VsTestCase(name, PhpUnitTestExecutor.ExecutorUri, _sources.FirstOrDefault() ?? "");
                         vsTestCaseBuilder.Add(vsTest);
                         mapBuilder.Add(name, puTest);

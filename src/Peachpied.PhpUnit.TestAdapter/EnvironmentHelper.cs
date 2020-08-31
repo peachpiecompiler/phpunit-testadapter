@@ -9,14 +9,14 @@ namespace Peachpied.PhpUnit.TestAdapter
 {
     internal static class EnvironmentHelper
     {
-        public static string ProjectDirectory { get; } = FindProjectDirectory();
+        public static string ProjectDirectory { get; } = TryFindProjectDirectory(Environment.CurrentDirectory);
 
-        private static string FindProjectDirectory()
+        public static string TryFindProjectDirectory(string assemblyDir)
         {
             // TODO: Obtain the information about the project root more reliably
 
             // project/path/bin/Debug/netcoreapp3.0 -> project/path
-            var tokens = Environment.CurrentDirectory.Split(Path.DirectorySeparatorChar);
+            var tokens = assemblyDir.Split(Path.DirectorySeparatorChar);
             if (tokens.Length >= 3
                 && tokens[tokens.Length - 3] == "bin"
                 && (tokens[tokens.Length - 2] == "Debug" || tokens[tokens.Length - 2] == "Release")
@@ -26,7 +26,7 @@ namespace Peachpied.PhpUnit.TestAdapter
             }
             else
             {
-                return Environment.CurrentDirectory;
+                return assemblyDir;
             }
         }
     }
