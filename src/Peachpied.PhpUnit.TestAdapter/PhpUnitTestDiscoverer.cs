@@ -36,7 +36,7 @@ namespace Peachpied.PhpUnit.TestAdapter
             {
                 string projectDir = EnvironmentHelper.TryFindProjectDirectory(Path.GetDirectoryName(source));
                 tempTestsXml = Path.GetTempFileName();
-                PhpUnitHelper.Launch(projectDir, source, "--teamcity", "--list-tests-xml", tempTestsXml);     // TODO: Remove --teamcity switch when it no longer causes crash
+                PhpUnitHelper.Launch(projectDir, source, new[] { "--teamcity", "--list-tests-xml", tempTestsXml });     // TODO: Remove --teamcity switch when it no longer causes crash
 
                 ProcessTestsXml(source, tempTestsXml, discoverySink);
 

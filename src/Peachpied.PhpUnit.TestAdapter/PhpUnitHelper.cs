@@ -19,7 +19,7 @@ namespace Peachpied.PhpUnit.TestAdapter
             Context.AddScriptReference(typeof(TestCase).Assembly);
         }
 
-        public static void Launch(string cwd, string testedAssembly, params string[] args)
+        public static void Launch(string cwd, string testedAssembly, string[] args, Action<Context> ctxPreparer = null)
         {
             // Load assembly with tests (if not loaded yet)
             Context.AddScriptReference(Assembly.LoadFrom(testedAssembly));
@@ -31,6 +31,9 @@ namespace Peachpied.PhpUnit.TestAdapter
                 // Set $_SERVER['SCRIPT_NAME'] to be different from __FILE__ so that it NEVER executes
                 // (there is the condition for execution __FILE__ === realpath($_SERVER['SCRIPT_NAME']) in PHPUnit PHAR entry file)
                 ctx.Server[CommonPhpArrayKeys.SCRIPT_NAME] = "__DUMMY_INVALID_FILE";
+
+                // Perform any custom operations on the context
+                ctxPreparer?.Invoke(ctx);
 
                 // Run the PHAR entry point so that all the classes are included
                 var pharLoader = Context.TryGetDeclaredScript(PharName);
@@ -58,6 +61,9 @@ namespace Peachpied.PhpUnit.TestAdapter
                 return e.ProcessStatus(ctx);
             }
         }
+
+        public static string GetTestNameFromPhp(string fullTestName) =>
+            fullTestName.Replace('\\', '.').Replace("::", ".");
 
         public static string GetTestNameFromPhp(string className, string methodName) =>
             className.Replace('\\', '.') + "." + methodName;

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.IO;
 using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
 
 namespace Peachpied.PhpUnit.TestAdapter
 {
@@ -16,10 +18,26 @@ namespace Peachpied.PhpUnit.TestAdapter
 
         public void RunTests(IEnumerable<string> sources, IRunContext runContext, IFrameworkHandle frameworkHandle)
         {
-            var ctx = new PhpUnitContext(sources);
-            var tests = ctx.FindTestCases();
-            
-            ctx.RunTests(tests, frameworkHandle);
+            foreach (var source in sources)
+            {
+                try
+                {
+                    string projectDir = EnvironmentHelper.TryFindProjectDirectory(Path.GetDirectoryName(source));
+
+                    PhpUnitHelper.Launch(projectDir, source, new[] { "--teamcity", "--extensions", TestReporterExtension.PhpName },
+                        ctx =>
+                        {
+                            ctx.DeclareType<TestReporterExtension>();
+
+                            var testRunCtx = new TestRunContext(source, frameworkHandle);
+                            ctx.SetProperty(testRunCtx);
+                        });
+                }
+                catch (Exception e)
+                {
+                    frameworkHandle.SendMessage(TestMessageLevel.Error, e.Message + "\n" + e.StackTrace);
+                }
+            }
         }
 
         public void RunTests(IEnumerable<TestCase> tests, IRunContext runContext, IFrameworkHandle frameworkHandle)
