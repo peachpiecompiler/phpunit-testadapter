@@ -40,25 +40,19 @@ namespace Peachpied.PhpUnit.TestAdapter
                 RunScript(ctx, () => pharLoader.Evaluate(ctx, PhpArray.NewEmpty(), null).ToInt());
 
                 // Run the tests themselves
-                int returnCode = RunScript(ctx, () => (int)Command.main(ctx, PhpTypeInfoExtension.GetPhpTypeInfo<Command>()));
-
-                // Check the return code (to inform about problems)
-                if (returnCode != 0)
-                {
-                    throw new System.Exception($"PHPUnit script ended with code {returnCode}.");
-                }
+                RunScript(ctx, () => (int)Command.main(ctx, PhpTypeInfoExtension.GetPhpTypeInfo<Command>()));
             }
         }
 
-        private static int RunScript(Context ctx, Func<int> callback)
+        private static void RunScript(Context ctx, Func<int> callback)
         {
             try
             {
-                return callback();
+                callback();
             }
             catch (ScriptDiedException e)
             {
-                return e.ProcessStatus(ctx);
+                e.ProcessStatus(ctx);
             }
         }
 
