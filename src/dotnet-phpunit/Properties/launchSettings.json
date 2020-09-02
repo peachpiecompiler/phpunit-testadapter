@@ -2,7 +2,6 @@
   "profiles": {
     "dotnet-phpunit": {
       "commandName": "Project",
-      "commandLineArgs": "--bootstrap src/Email.php tests/EmailTest.php",
       "workingDirectory": "../../samples/Lib"
     }
   }
