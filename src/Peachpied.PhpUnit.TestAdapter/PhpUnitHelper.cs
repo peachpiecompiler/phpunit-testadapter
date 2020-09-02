@@ -67,5 +67,19 @@ namespace Peachpied.PhpUnit.TestAdapter
 
         public static string GetTestNameFromPhp(string className, string methodName) =>
             className.Replace('\\', '.') + "." + methodName;
+
+        public static string GetPhpTestName(string fullTestName)
+        {
+            int methodSepPos = fullTestName.LastIndexOf('.');
+            if (methodSepPos == -1)
+            {
+                return fullTestName;
+            }
+
+            string dotnetNamespacedClassName = fullTestName.Substring(0, methodSepPos);
+            string methodName = fullTestName.Substring(methodSepPos + 1);
+
+            return dotnetNamespacedClassName.Replace('.', '\\') + "::" + methodName;
+        }
     }
 }
