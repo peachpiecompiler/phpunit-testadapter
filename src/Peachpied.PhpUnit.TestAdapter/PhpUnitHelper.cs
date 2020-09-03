@@ -9,6 +9,9 @@ using System.Text;
 
 namespace Peachpied.PhpUnit.TestAdapter
 {
+    /// <summary>
+    /// Helper for running PHPUnit and translating test names.
+    /// </summary>
     internal static class PhpUnitHelper
     {
         private const string PharName = "phpunit.phar";
@@ -19,6 +22,9 @@ namespace Peachpied.PhpUnit.TestAdapter
             Context.AddScriptReference(typeof(TestCase).Assembly);
         }
 
+        /// <summary>
+        /// Run PHPUnit on the given assembly and command line arguments.
+        /// </summary>
         public static void Launch(string cwd, string testedAssembly, string[] args, Action<Context> ctxPreparer = null)
         {
             // Load assembly with tests (if not loaded yet)
@@ -56,12 +62,21 @@ namespace Peachpied.PhpUnit.TestAdapter
             }
         }
 
+        /// <summary>
+        /// E.g. <c>My\NS\TestClass::test</c> to <c>My.NS.TestClass.test</c>.
+        /// </summary>
         public static string GetTestNameFromPhp(string fullTestName) =>
             fullTestName.Replace('\\', '.').Replace("::", ".");
 
+        /// <summary>
+        /// E.g. <c>My\NS\TestClass</c>, <c>test</c> to <c>My.NS.TestClass.test</c>.
+        /// </summary>
         public static string GetTestNameFromPhp(string className, string methodName) =>
             className.Replace('\\', '.') + "." + methodName;
 
+        /// <summary>
+        /// E.g. <c>My.NS.TestClass.test</c> to <c>My\NS\TestClass::test</c>.
+        /// </summary>
         public static string GetPhpTestName(string fullTestName)
         {
             int methodSepPos = fullTestName.LastIndexOf('.');

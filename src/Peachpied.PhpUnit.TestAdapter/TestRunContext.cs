@@ -5,6 +5,9 @@ using System.Text;
 
 namespace Peachpied.PhpUnit.TestAdapter
 {
+    /// <summary>
+    /// Class to store information about the current test run to be used from <see cref="TestReporterExtension"/>.
+    /// </summary>
     internal class TestRunContext
     {
         public string Source { get; }

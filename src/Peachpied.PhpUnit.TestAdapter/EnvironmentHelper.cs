@@ -7,10 +7,15 @@ using System.Text;
 
 namespace Peachpied.PhpUnit.TestAdapter
 {
+    /// <summary>
+    /// Helper to obtain the information about the environment where the tests are being run.
+    /// </summary>
     internal static class EnvironmentHelper
     {
-        public static string ProjectDirectory { get; } = TryFindProjectDirectory(Environment.CurrentDirectory);
-
+        /// <summary>
+        /// Try to deduce the project directory from the location of the compiled assembly.
+        /// Returns <paramref name="assemblyDir"/> if it fails.
+        /// </summary>
         public static string TryFindProjectDirectory(string assemblyDir)
         {
             // TODO: Obtain the information about the project root more reliably

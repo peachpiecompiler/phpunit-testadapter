@@ -8,6 +8,10 @@ using System.Text;
 
 namespace Peachpied.PhpUnit.TestAdapter
 {
+    /// <summary>
+    /// Custom PHPUnit extension to report the test results.
+    /// Expects <see cref="TestRunContext"/> in the properties of <see cref="Context"/>.
+    /// </summary>
     internal class TestReporterExtension : BeforeTestHook, AfterSuccessfulTestHook, AfterTestErrorHook, AfterTestFailureHook, AfterSkippedTestHook
     {
         public readonly static string PhpName = typeof(TestReporterExtension).GetPhpTypeInfo().Name;
@@ -16,6 +20,7 @@ namespace Peachpied.PhpUnit.TestAdapter
 
         public TestReporterExtension(Context ctx)
         {
+            // Restore the test run information from the Context
             _testRunContext = ctx.TryGetProperty<TestRunContext>() ?? throw new InvalidOperationException();
         }
 

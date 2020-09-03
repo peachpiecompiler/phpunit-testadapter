@@ -9,12 +9,17 @@ using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
 
 namespace Peachpied.PhpUnit.TestAdapter
 {
+    /// <summary>
+    /// Implementation of the <see cref="ITestDiscoverer"/> interface used to discover tests prior to running
+    /// them in interactive scenarios, e.g. Test Explorer in Microsoft Visual Studio.
+    /// </summary>
     [DefaultExecutorUri(PhpUnitTestExecutor.ExecutorUriString)]
     [FileExtension(".dll")]
     public sealed class PhpUnitTestDiscoverer : ITestDiscoverer
     {
         public void DiscoverTests(IEnumerable<string> sources, IDiscoveryContext discoveryContext, IMessageLogger logger, ITestCaseDiscoverySink discoverySink)
         {
+            // Run each assembly (project) separately
             foreach (var source in sources)
             {
                 try
@@ -34,9 +39,10 @@ namespace Peachpied.PhpUnit.TestAdapter
 
             try
             {
+                // Use XML output of PHPUnit to gather all the tests and report them
                 string projectDir = EnvironmentHelper.TryFindProjectDirectory(Path.GetDirectoryName(source));
                 tempTestsXml = Path.GetTempFileName();
-                PhpUnitHelper.Launch(projectDir, source, new[] { "--teamcity", "--list-tests-xml", tempTestsXml });     // TODO: Remove --teamcity switch when it no longer causes crash
+                PhpUnitHelper.Launch(projectDir, source, new[] { "--list-tests-xml", tempTestsXml });
 
                 ProcessTestsXml(source, tempTestsXml, discoverySink);
 

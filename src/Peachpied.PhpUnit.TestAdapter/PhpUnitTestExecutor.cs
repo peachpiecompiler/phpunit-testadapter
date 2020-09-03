@@ -9,12 +9,18 @@ using System.Text.RegularExpressions;
 
 namespace Peachpied.PhpUnit.TestAdapter
 {
+    /// <summary>
+    /// Implementation of the <see cref="ITestExecutor"/> interface used to run tests.
+    /// </summary>
     [ExtensionUri(PhpUnitTestExecutor.ExecutorUriString)]
     public sealed class PhpUnitTestExecutor : ITestExecutor
     {
         public const string ExecutorUriString = "executor://PhpUnitTestExecutor/v1";
         public static readonly Uri ExecutorUri = new Uri(ExecutorUriString);
 
+        /// <summary>
+        /// Run all the tests in the assemblies, used e.g. from <c>dotnet test</c>.
+        /// </summary>
         public void RunTests(IEnumerable<string> sources, IRunContext runContext, IFrameworkHandle frameworkHandle)
         {
             foreach (var source in sources)
@@ -23,6 +29,9 @@ namespace Peachpied.PhpUnit.TestAdapter
             }
         }
 
+        /// <summary>
+        /// Run selected tests, used e.g. from Test Explorer in Microsoft Visual Studio.
+        /// </summary>
         public void RunTests(IEnumerable<TestCase> tests, IRunContext runContext, IFrameworkHandle frameworkHandle)
         {
             foreach (var sourceGroup in tests.GroupBy(t => t.Source))
@@ -35,7 +44,8 @@ namespace Peachpied.PhpUnit.TestAdapter
         {
             try
             {
-                var args = new[] { "--teamcity", "--extensions", TestReporterExtension.PhpName };
+                // Inject our custom extension to report the test results
+                var args = new[] { "--extensions", TestReporterExtension.PhpName };
 
                 // Optionally filter the test cases by their names
                 if (testCases != null)
@@ -55,8 +65,10 @@ namespace Peachpied.PhpUnit.TestAdapter
                 PhpUnitHelper.Launch(projectDir, source, args,
                     ctx =>
                     {
+                        // Enable Peachpie to create an instance of our custom extension
                         ctx.DeclareType<TestReporterExtension>();
 
+                        // Pass data to the extension via Context
                         var testRunCtx = new TestRunContext(source, frameworkHandle);
                         ctx.SetProperty(testRunCtx);
                     });
@@ -67,6 +79,9 @@ namespace Peachpied.PhpUnit.TestAdapter
             }
         }
 
+        /// <summary>
+        /// Cancel test execution, currently ignored.
+        /// </summary>
         public void Cancel()
         {
             // TODO
