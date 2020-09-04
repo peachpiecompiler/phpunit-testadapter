@@ -42,9 +42,9 @@ namespace Peachpied.PhpUnit.TestAdapter
                 // Use XML output of PHPUnit to gather all the tests and report them
                 string projectDir = EnvironmentHelper.TryFindProjectDirectory(Path.GetDirectoryName(source));
                 tempTestsXml = Path.GetTempFileName();
-                PhpUnitHelper.Launch(projectDir, source, new[] { "--list-tests-xml", tempTestsXml });
-
-                ProcessTestsXml(source, tempTestsXml, discoverySink);
+                PhpUnitHelper.Launch(projectDir, source, new[] { "--list-tests-xml", tempTestsXml },
+                    finishCallback: ctx => ProcessTestsXml(ctx, source, tempTestsXml, discoverySink)
+                );
             }
             finally
             {
@@ -55,23 +55,31 @@ namespace Peachpied.PhpUnit.TestAdapter
             }
         }
 
-        private static void ProcessTestsXml(string source, string path, ITestCaseDiscoverySink discoverySink)
+        private static void ProcessTestsXml(Pchp.Core.Context ctx, string source, string path, ITestCaseDiscoverySink discoverySink)
         {
             var testsEl = XElement.Load(path);
             foreach (var testCaseClassEl in testsEl.Descendants("testCaseClass"))
             {
-                string className = testCaseClassEl.Attribute("name").Value;
+                var phpClassName = testCaseClassEl.Attribute("name").Value;
+                var classInfo = ctx.GetDeclaredType(phpClassName, autoload: false);
+                var filePath = Path.GetFullPath(Path.Combine(ctx.RootPath, classInfo.RelativePath));
+
+                string[] fileContent = null;
 
                 foreach (var testCaseMethodEl in testCaseClassEl.Descendants("testCaseMethod"))
                 {
                     var methodName = testCaseMethodEl.Attribute("name").Value;
 
-                    var testName = PhpUnitHelper.GetTestNameFromPhp(className, methodName);
-                    var testCase = new TestCase(testName, PhpUnitTestExecutor.ExecutorUri, source);
+                    var testName = PhpUnitHelper.GetTestNameFromPhp(classInfo, methodName);
+                    var testCase = new TestCase(testName, PhpUnitTestExecutor.ExecutorUri, source)
+                    {
+                        DisplayName = $"function {classInfo.Name}::{methodName}()",
+                        CodeFilePath = filePath,
+                        LineNumber = GetLineNumber(filePath, phpClassName, methodName, ref fileContent),
+                    };
 
                     ProcessTraits(testCase, testCaseMethodEl.Attribute("groups")?.Value);
 
-                    //testCase.CodeFilePath
                     discoverySink.SendTestCase(testCase);
                 }
             }
@@ -86,6 +94,60 @@ namespace Peachpied.PhpUnit.TestAdapter
                     testCase.Traits.Add(group, null);
                 }
             }
+        }
+
+        private static int GetLineNumber(string filePath, string className, string methodName, ref string[] fileContent)
+        {
+            // trim off namespace part of class name
+            var sep = className.IndexOf('\\');
+            if (sep >= 0) className = className.Substring(sep + 1);
+
+            // read the file
+            if (fileContent == null)
+            {
+                fileContent = File.ReadAllLines(filePath);
+            }
+
+            // find the class:
+            int classLine = 0;
+
+            for (int i = 0; i < fileContent.Length; i++)
+            {
+                if (fileContent[i].IndexOf("class", StringComparison.OrdinalIgnoreCase) >= 0 &&
+                    fileContent[i].IndexOf(className, StringComparison.InvariantCultureIgnoreCase) >= 0)
+                {
+                    classLine = i;
+                    break;
+                }
+            }
+
+            // guess the method line
+            for (int i = classLine; i < fileContent.Length; i++)
+            {
+                var line = fileContent[i];
+                if (line.IndexOf("function", StringComparison.OrdinalIgnoreCase) < 0)
+                {
+                    continue;
+                }
+
+                var idx = line.IndexOf(methodName, StringComparison.InvariantCultureIgnoreCase);
+                if (idx < 0)
+                {
+                    continue;
+             
+                }
+
+                if (idx == 0 || !char.IsLetterOrDigit(line[idx - 1]))
+                {
+                    var end = idx + methodName.Length;
+                    if (end >= line.Length || !char.IsLetterOrDigit(line[end]))
+                    {
+                        return i + 1;
+                    }
+                }
+            }
+
+            return 1;
         }
     }
 }

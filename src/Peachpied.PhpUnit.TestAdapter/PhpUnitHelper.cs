@@ -25,7 +25,7 @@ namespace Peachpied.PhpUnit.TestAdapter
         /// <summary>
         /// Run PHPUnit on the given assembly and command line arguments.
         /// </summary>
-        public static void Launch(string cwd, string testedAssembly, string[] args, Action<Context> ctxPreparer = null)
+        public static void Launch(string cwd, string testedAssembly, string[] args, Action<Context> initCalblack = null, Action<Context> finishCallback = null)
         {
             // Load assembly with tests (if not loaded yet)
             Context.AddScriptReference(Assembly.LoadFrom(testedAssembly));
@@ -39,7 +39,7 @@ namespace Peachpied.PhpUnit.TestAdapter
                 ctx.Server[CommonPhpArrayKeys.SCRIPT_NAME] = "__DUMMY_INVALID_FILE";
 
                 // Perform any custom operations on the context
-                ctxPreparer?.Invoke(ctx);
+                initCalblack?.Invoke(ctx);
 
                 // Run the PHAR entry point so that all the classes are included
                 var pharLoader = Context.TryGetDeclaredScript(PharName);
@@ -47,6 +47,9 @@ namespace Peachpied.PhpUnit.TestAdapter
 
                 // Run the tests themselves
                 RunScript(ctx, () => (int)Command.main(ctx, PhpTypeInfoExtension.GetPhpTypeInfo<Command>()));
+
+                //
+                finishCallback?.Invoke(ctx);
             }
         }
 
@@ -73,6 +76,12 @@ namespace Peachpied.PhpUnit.TestAdapter
         /// </summary>
         public static string GetTestNameFromPhp(string className, string methodName) =>
             className.Replace('\\', '.') + "." + methodName;
+
+        /// <summary>
+        /// E.g. <c>My\NS\TestClass</c>, <c>test</c> to <c>My.NS.TestClass.test</c>.
+        /// </summary>
+        public static string GetTestNameFromPhp(PhpTypeInfo classInfo, string methodName) =>
+            classInfo.Type.FullName + "." + methodName;
 
         /// <summary>
         /// E.g. <c>My.NS.TestClass.test</c> to <c>My\NS\TestClass::test</c>.
