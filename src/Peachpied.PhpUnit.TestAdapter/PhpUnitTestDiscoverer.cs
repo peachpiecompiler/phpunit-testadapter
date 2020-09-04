@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using Devsense.PHP.Syntax;
+using Devsense.PHP.Syntax.Ast;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
@@ -64,7 +66,7 @@ namespace Peachpied.PhpUnit.TestAdapter
                 var classInfo = ctx.GetDeclaredType(phpClassName, autoload: false);
                 var filePath = Path.GetFullPath(Path.Combine(ctx.RootPath, classInfo.RelativePath));
 
-                string[] fileContent = null;
+                var unit = CodeSourceUnit.ParseCode(File.ReadAllText(filePath), filePath);
 
                 foreach (var testCaseMethodEl in testCaseClassEl.Descendants("testCaseMethod"))
                 {
@@ -73,9 +75,9 @@ namespace Peachpied.PhpUnit.TestAdapter
                     var testName = PhpUnitHelper.GetTestNameFromPhp(classInfo, methodName);
                     var testCase = new TestCase(testName, PhpUnitTestExecutor.ExecutorUri, source)
                     {
-                        DisplayName = $"function {classInfo.Name}::{methodName}()",
+                        //DisplayName = $"function {classInfo.Name}::{methodName}()",
                         CodeFilePath = filePath,
-                        LineNumber = GetLineNumber(filePath, phpClassName, methodName, ref fileContent),
+                        LineNumber = GetLineNumber(unit, phpClassName, methodName),
                     };
 
                     ProcessTraits(testCase, testCaseMethodEl.Attribute("groups")?.Value);
@@ -96,57 +98,52 @@ namespace Peachpied.PhpUnit.TestAdapter
             }
         }
 
-        private static int GetLineNumber(string filePath, string className, string methodName, ref string[] fileContent)
+        #region MethodVisitor
+
+        class MethodVisitor : TreeVisitor
         {
-            // trim off namespace part of class name
-            var sep = className.IndexOf('\\');
-            if (sep >= 0) className = className.Substring(sep + 1);
+            public QualifiedName ClassName { get; private set; }
 
-            // read the file
-            if (fileContent == null)
+            public Name MethodName { get; private set; }
+
+            public MethodDecl Method { get; private set; }
+
+            public MethodVisitor(string phpClassName, string methodName)
             {
-                fileContent = File.ReadAllLines(filePath);
+                ClassName = QualifiedName.Parse(phpClassName, true);
+                MethodName = new Name(methodName);
             }
 
-            // find the class:
-            int classLine = 0;
-
-            for (int i = 0; i < fileContent.Length; i++)
+            public override void VisitMethodDecl(MethodDecl x)
             {
-                if (fileContent[i].IndexOf("class", StringComparison.OrdinalIgnoreCase) >= 0 &&
-                    fileContent[i].IndexOf(className, StringComparison.InvariantCultureIgnoreCase) >= 0)
+                if (x.Name == MethodName && x.ContainingType.QualifiedName == ClassName)
                 {
-                    classLine = i;
-                    break;
+                    Method = x;
                 }
             }
 
-            // guess the method line
-            for (int i = classLine; i < fileContent.Length; i++)
+            public override void VisitFunctionDecl(FunctionDecl x)
             {
-                var line = fileContent[i];
-                if (line.IndexOf("function", StringComparison.OrdinalIgnoreCase) < 0)
-                {
-                    continue;
-                }
+                // nope
+            }
+        }
 
-                var idx = line.IndexOf(methodName, StringComparison.InvariantCultureIgnoreCase);
-                if (idx < 0)
-                {
-                    continue;
-             
-                }
+        #endregion
 
-                if (idx == 0 || !char.IsLetterOrDigit(line[idx - 1]))
+        private static int GetLineNumber(SourceUnit unit, string className, string methodName)
+        {
+            if (unit?.Ast != null)
+            {
+                var visitor = new MethodVisitor(className, methodName);
+                visitor.VisitGlobalCode(unit.Ast);
+
+                if (visitor.Method != null)
                 {
-                    var end = idx + methodName.Length;
-                    if (end >= line.Length || !char.IsLetterOrDigit(line[end]))
-                    {
-                        return i + 1;
-                    }
+                    return unit.GetLineFromPosition(visitor.Method.HeadingSpan.Start) + 1;
                 }
             }
 
+            //
             return 1;
         }
     }
