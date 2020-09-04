@@ -4,6 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <LangVersion>7.4</LangVersion>
+    <NoWarn>PHP6002</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
