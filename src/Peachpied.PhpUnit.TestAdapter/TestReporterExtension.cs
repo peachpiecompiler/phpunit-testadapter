@@ -28,23 +28,25 @@ namespace Peachpied.PhpUnit.TestAdapter
             _testRunContext.FrameworkHandle.RecordStart(GetTestCase(test));
 
         public void executeAfterSuccessfulTest([NotNull] string test, double time) =>
-            ReportOutcome(test, TestOutcome.Passed);
+            ReportOutcome(test, TestOutcome.Passed, time: time);
 
         public void executeAfterTestError([NotNull] string test, [NotNull] string message, double time) =>
-            ReportOutcome(test, TestOutcome.Failed);
+            ReportOutcome(test, TestOutcome.Failed, message, time);
 
         public void executeAfterTestFailure([NotNull] string test, [NotNull] string message, double time) =>
-            ReportOutcome(test, TestOutcome.Failed);
+            ReportOutcome(test, TestOutcome.Failed, message, time);
 
         public void executeAfterSkippedTest([NotNull] string test, [NotNull] string message, double time) =>
-            ReportOutcome(test, TestOutcome.Skipped);
+            ReportOutcome(test, TestOutcome.Skipped, message, time);
 
-        private void ReportOutcome(string phpTestName, TestOutcome outcome)
+        private void ReportOutcome(string phpTestName, TestOutcome outcome, string message = null, double time = 0.0)
         {
             var testCase = GetTestCase(phpTestName);
             var testResult = new TestResult(testCase)
             {
-                Outcome = outcome
+                Outcome = outcome,
+                ErrorMessage = message,
+                Duration = TimeSpan.FromSeconds(time),
             };
 
             _testRunContext.FrameworkHandle.RecordResult(testResult);
