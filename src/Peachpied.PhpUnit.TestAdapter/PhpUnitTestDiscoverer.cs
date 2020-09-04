@@ -45,8 +45,6 @@ namespace Peachpied.PhpUnit.TestAdapter
                 PhpUnitHelper.Launch(projectDir, source, new[] { "--list-tests-xml", tempTestsXml });
 
                 ProcessTestsXml(source, tempTestsXml, discoverySink);
-
-                File.Delete(tempTestsXml);
             }
             finally
             {
@@ -66,12 +64,26 @@ namespace Peachpied.PhpUnit.TestAdapter
 
                 foreach (var testCaseMethodEl in testCaseClassEl.Descendants("testCaseMethod"))
                 {
-                    string methodName = testCaseMethodEl.Attribute("name").Value;
+                    var methodName = testCaseMethodEl.Attribute("name").Value;
 
-                    string testName = PhpUnitHelper.GetTestNameFromPhp(className, methodName);
+                    var testName = PhpUnitHelper.GetTestNameFromPhp(className, methodName);
                     var testCase = new TestCase(testName, PhpUnitTestExecutor.ExecutorUri, source);
 
+                    ProcessTraits(testCase, testCaseMethodEl.Attribute("groups")?.Value);
+
+                    //testCase.CodeFilePath
                     discoverySink.SendTestCase(testCase);
+                }
+            }
+        }
+
+        private static void ProcessTraits(TestCase testCase, string groups)
+        {
+            if (!string.IsNullOrEmpty(groups))
+            {
+                foreach (var group in groups.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    testCase.Traits.Add(group, null);
                 }
             }
         }
