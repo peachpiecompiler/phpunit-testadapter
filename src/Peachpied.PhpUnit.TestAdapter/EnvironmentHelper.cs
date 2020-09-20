@@ -34,5 +34,20 @@ namespace Peachpied.PhpUnit.TestAdapter
                 return assemblyDir;
             }
         }
+
+        /// <summary>
+        /// Generate a file name in the given directory with the given prefix which
+        /// does not exists in it yet.
+        /// </summary>
+        public static string GetNonexistingFilePath(string dir, string prefix = "")
+        {
+            string filePath;
+            do
+            {
+                filePath = Path.Combine(dir, prefix + Path.GetRandomFileName());
+            } while (File.Exists(filePath));
+
+            return filePath;
+        }
     }
 }
