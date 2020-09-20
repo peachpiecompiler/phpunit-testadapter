@@ -30,4 +30,20 @@ final class EmailTest extends TestCase
             Email::fromString('user@example.com')
         );
     }
+
+    /**
+     * @dataProvider dataProvider
+     */
+    public function testDataProviding($val)
+    {
+      $this->assertEquals(42, $val);
+    }
+
+    public function dataProvider()
+    {
+      return array(
+        array(42),
+        array("42")
+      );
+    }
 }

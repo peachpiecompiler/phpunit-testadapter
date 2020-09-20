@@ -52,10 +52,20 @@ namespace Peachpied.PhpUnit.TestAdapter
             _testRunContext.FrameworkHandle.RecordResult(testResult);
         }
 
-        private TestCase GetTestCase(string phpTestName)
+        private TestCase GetTestCase(string fullPhpTestName)
         {
+            // "class::method with data set #0 ('foo', ...)" -> "class::method"
+            int dataSetStrPos = fullPhpTestName.IndexOf(" with data set ");
+            string phpTestName =
+                (dataSetStrPos != -1)
+                ? fullPhpTestName.Substring(0, dataSetStrPos)
+                : fullPhpTestName;
+
             string vsTestName = PhpUnitHelper.GetTestNameFromPhp(phpTestName);
-            return new TestCase(vsTestName, PhpUnitTestExecutor.ExecutorUri, _testRunContext.Source);
+            return new TestCase(vsTestName, PhpUnitTestExecutor.ExecutorUri, _testRunContext.Source)
+            {
+                DisplayName = fullPhpTestName   // Preserve the original data set information if present
+            };
         }
     }
 }

@@ -82,7 +82,7 @@ namespace Peachpied.PhpUnit.TestAdapter
 
                     if (unit != null)
                     {
-                        //testCase.DisplayName = $"function {classInfo.Name}::{methodName}()",
+                        testCase.DisplayName = $"{classInfo.Name}::{methodName}";
                         testCase.CodeFilePath = filePath;
                         testCase.LineNumber = GetLineNumber(unit, phpClassName, methodName);
                     };
