@@ -66,18 +66,25 @@ namespace Peachpied.PhpUnit.TestAdapter
                 var classInfo = ctx.GetDeclaredType(phpClassName, autoload: false);
                 var filePath = Path.GetFullPath(Path.Combine(ctx.RootPath, classInfo.RelativePath));
 
-                var unit = CodeSourceUnit.ParseCode(File.ReadAllText(filePath), filePath);
+                // The file might not exist as PHPUnit may mistakenly select classes and methods in its own PHAR,
+                // namely PHPUnit\Framework\WarningTestCase::Warning (happened with PHPUnit 7.5.9)
+                var unit =
+                    File.Exists(filePath)
+                    ? CodeSourceUnit.ParseCode(File.ReadAllText(filePath), filePath)
+                    : null;
 
                 foreach (var testCaseMethodEl in testCaseClassEl.Descendants("testCaseMethod"))
                 {
                     var methodName = testCaseMethodEl.Attribute("name").Value;
 
                     var testName = PhpUnitHelper.GetTestNameFromPhp(classInfo, methodName);
-                    var testCase = new TestCase(testName, PhpUnitTestExecutor.ExecutorUri, source)
+                    var testCase = new TestCase(testName, PhpUnitTestExecutor.ExecutorUri, source);
+
+                    if (unit != null)
                     {
-                        //DisplayName = $"function {classInfo.Name}::{methodName}()",
-                        CodeFilePath = filePath,
-                        LineNumber = GetLineNumber(unit, phpClassName, methodName),
+                        //testCase.DisplayName = $"function {classInfo.Name}::{methodName}()",
+                        testCase.CodeFilePath = filePath;
+                        testCase.LineNumber = GetLineNumber(unit, phpClassName, methodName);
                     };
 
                     ProcessTraits(testCase, testCaseMethodEl.Attribute("groups")?.Value);
