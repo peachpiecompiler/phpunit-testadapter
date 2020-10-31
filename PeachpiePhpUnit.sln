@@ -11,7 +11,15 @@ Project("{13B669BE-BB05-4DDF-9536-439F39A36129}") = "Lib", "samples\Lib\Lib.msbu
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{4BAA7A9F-4A8C-4AD5-9842-61DAA740A871}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Peachpied.PhpUnit.TestAdapter", "src\Peachpied.PhpUnit.TestAdapter\Peachpied.PhpUnit.TestAdapter.csproj", "{D60B740C-3C98-4519-90DC-1B91239C5623}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Peachpied.PhpUnit.TestAdapter", "src\Peachpied.PhpUnit.TestAdapter\Peachpied.PhpUnit.TestAdapter.csproj", "{D60B740C-3C98-4519-90DC-1B91239C5623}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{35B254AE-A7D6-42E5-9A3F-98D92CD0B8E6}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+		global.json = global.json
+		NuGet.Config = NuGet.Config
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

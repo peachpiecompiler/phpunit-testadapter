@@ -69,17 +69,21 @@ namespace Peachpied.PhpUnit.TestAdapter
 
                 // Run the PHAR entry point so that all the classes are included
                 var pharLoader = Context.TryGetDeclaredScript(PharName);
-                RunScript(ctx, () => pharLoader.Evaluate(ctx, PhpArray.NewEmpty(), null).ToInt());
+                if (pharLoader.IsValid)
+                {
+                    // only in case we are running from phar, otherwise classes are autoloaded by runtime
+                    RunScript(ctx, () => pharLoader.Evaluate(ctx, PhpArray.NewEmpty(), null));
+                }
 
                 // Run the tests themselves
-                RunScript(ctx, () => (int)Command.main(ctx, PhpTypeInfoExtension.GetPhpTypeInfo<Command>()));
+                RunScript(ctx, () => new Command(ctx).run(new PhpArray(args), exit: true));
 
                 //
                 finishCallback?.Invoke(ctx);
             }
         }
 
-        private static void RunScript(Context ctx, Func<int> callback)
+        private static void RunScript<TResult>(Context ctx, Func<TResult> callback)
         {
             try
             {
