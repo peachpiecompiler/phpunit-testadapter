@@ -13,7 +13,8 @@ This all together allows to **run, debug, and profile** PHPUnit tests on top of 
 
 The test project will be a .NET executable application (e.g. TargetFramework `netcoreapp3.1`), compiling the test files (e.g. `tests/**.php`), and referencing the actual PeachPie/PHP application.
 
-*`lib.msbuildproj`*:
+**`lib.msbuildproj`**:
+
 ```xml
 <Project Sdk="Peachpie.NET.Sdk/1.0.0-preview3">
   <PropertyGroup>
@@ -27,8 +28,9 @@ The test project will be a .NET executable application (e.g. TargetFramework `ne
 </Project>
 ```
 
-*file structure*:
-```
+**File structure**:
+
+```text
 - src
   - Email.php
 - tests
@@ -37,7 +39,7 @@ The test project will be a .NET executable application (e.g. TargetFramework `ne
 - lib.msbuildproj
 ```
 
-*usage*:
+**Usage**:
 
 - In Visual Studio:
 
@@ -47,7 +49,7 @@ The test project will be a .NET executable application (e.g. TargetFramework `ne
     
 - On command line:
 
-    ```
+    ```bash
     dotnet test
     ```
 
@@ -65,13 +67,13 @@ The test adapter can be tested on the following sample:
 
 To run them from the command line, navigate to `samples/Lib` and run:
 
-```
+```bash
 dotnet test
 ```
 
 The output should be similar to this one (possibly preceeded by the build log):
 
-```
+```text
 Test run for samples\Lib\bin\Debug\netcoreapp3.1\Lib.dll(.NETCoreApp,Version=v3.1)
 Microsoft (R) Test Execution Command Line Tool Version 16.6.0
 Copyright (c) Microsoft Corporation.  All rights reserved.
@@ -94,14 +96,15 @@ To test `dotnet-phpunit` on `samples/Lib` (which references `phpunit.phpunit.pha
 
 To test it, run the following commands in the directory `samples/Lib`:
 
-```
+```bash
 dotnet tool install --global dotnet-phpunit
 dotnet build
 dotnet phpunit
 ```
 
 Both variants should run PHPUnit with the output similar to this one:
-```
+
+```text
 Runner of PHPUnit (© Sebastian Bergmann) on PHP assemblies compiled by Peachpie
 
 Building "samples\Lib\Lib.msbuildproj"...
@@ -119,12 +122,12 @@ OK (3 tests, 3 assertions)
 
 To explicitly disable building of the project (as it's already built), pass the `--no-build` option to `dotnet phunit`, e.g.:
 
-```
+```bash
 dotnet phpunit --no-build
 ```
 
 If you wish to remove `dotnet-phpunit` from the set of installed tools, run:
 
-```
+```bash
 dotnet tool uninstall --global dotnet-phpunit
 ```
