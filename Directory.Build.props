@@ -3,6 +3,7 @@
   <PropertyGroup>
     <PhpUnitVersion Condition="$(PhpUnitVersion) == ''">9.2.6</PhpUnitVersion>
     <VersionSuffix>preview3</VersionSuffix>
+    <PackageReadmePath>$(MSBuildThisFileDirectory)README.md</PackageReadmePath>
   </PropertyGroup>
 
 </Project>

@@ -7,7 +7,11 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="16.0.0" ExcludeAssets="runtime" />
-    <PackageReference Include="phpunit.phpunit" Version="$(PhpUnitVersion)-preview3" />
+    <PackageReference Include="phpunit.phpunit" Version="$(PhpUnitVersion)-preview3" IncludeAssets="compile;runtime" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="$(PackageReadmePath)" Pack="true" PackagePath="assets/readme.md" Condition=" Exists('$(PackageReadmePath)') " />
   </ItemGroup>
 
 </Project>
