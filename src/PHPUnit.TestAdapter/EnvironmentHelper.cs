@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace Peachpied.PhpUnit.TestAdapter
+namespace PHPUnit.TestAdapter
 {
     /// <summary>
     /// Helper to obtain the information about the environment where the tests are being run.

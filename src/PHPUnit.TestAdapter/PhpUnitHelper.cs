@@ -8,7 +8,7 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 
-namespace Peachpied.PhpUnit.TestAdapter
+namespace PHPUnit.TestAdapter
 {
     /// <summary>
     /// Helper for running PHPUnit and translating test names.

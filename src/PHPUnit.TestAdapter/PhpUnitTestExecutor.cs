@@ -11,7 +11,7 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
 
-namespace Peachpied.PhpUnit.TestAdapter
+namespace PHPUnit.TestAdapter
 {
     /// <summary>
     /// Implementation of the <see cref="ITestExecutor"/> interface used to run tests.
@@ -77,7 +77,7 @@ namespace Peachpied.PhpUnit.TestAdapter
                         ctx.SetProperty(testRunCtx);
                     });
             }
-            catch (Exception e)
+            catch (System.Exception e)
             {
                 frameworkHandle.SendMessage(TestMessageLevel.Error, e.Message + "\n" + e.StackTrace);
             }

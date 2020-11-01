@@ -3,9 +3,8 @@
   <Import Project="$(MSBuildThisFileDirectory)../Directory.Build.props" />
   
   <PropertyGroup>
-    <Version>$(PhpUnitVersion)</Version>
-    <PackageVersion>$(PhpUnitVersion)</PackageVersion>
-    <PackageOutputPath>$(MSBuildThisFileDirectory)../nupkg</PackageOutputPath>
+    <VersionPrefix>$(PhpUnitVersion)</VersionPrefix>
+    <PackageOutputPath>$(MSBuildThisFileDirectory)../artifacts</PackageOutputPath>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 

@@ -1,8 +1,0 @@
-<phpunit bootstrap="src/Email.php">
-	<testsuites>
-		<!-- Default test suite to run all tests. -->
-		<testsuite name="tests">
-			<directory suffix=".php">tests</directory>
-		</testsuite>
-	</testsuites>
-</phpunit>

@@ -9,7 +9,7 @@ using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
 
-namespace Peachpied.PhpUnit.TestAdapter
+namespace PHPUnit.TestAdapter
 {
     /// <summary>
     /// Implementation of the <see cref="ITestDiscoverer"/> interface used to discover tests prior to running
@@ -28,7 +28,7 @@ namespace Peachpied.PhpUnit.TestAdapter
                 {
                     ProcessSource(discoverySink, source);
                 }
-                catch (Exception e)
+                catch (System.Exception e)
                 {
                     logger.SendMessage(TestMessageLevel.Error, e.Message + "\n" + e.StackTrace);
                 }

@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Peachpied.PhpUnit.TestAdapter
+namespace PHPUnit.TestAdapter
 {
     /// <summary>
     /// Custom PHPUnit extension to report the test results.
@@ -14,9 +14,9 @@ namespace Peachpied.PhpUnit.TestAdapter
     /// </summary>
     internal class TestReporterExtension : BeforeTestHook, AfterSuccessfulTestHook, AfterTestErrorHook, AfterTestFailureHook, AfterSkippedTestHook
     {
-        public readonly static string PhpName = typeof(TestReporterExtension).GetPhpTypeInfo().Name;
+        public static string PhpName => PhpTypeInfoExtension.GetPhpTypeInfo<TestReporterExtension>().Name;
 
-        private TestRunContext _testRunContext;
+        readonly TestRunContext _testRunContext;
 
         public TestReporterExtension(Context ctx)
         {

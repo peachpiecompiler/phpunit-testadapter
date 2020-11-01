@@ -159,7 +159,10 @@ namespace DotnetPhpUnit
 
             // Run the PHAR entry point so that all the classes are included
             var pharLoader = Context.TryGetDeclaredScript(PharName);
-            RunScript(ctx, () => pharLoader.Evaluate(ctx, PhpArray.NewEmpty(), null).ToInt());
+            if (pharLoader.IsValid)
+            {
+                RunScript(ctx, () => pharLoader.Evaluate(ctx, PhpArray.NewEmpty(), null).ToInt());
+            }
 
             // Run the tests themselves
             return RunScript(ctx, () => (int)Command.main(ctx, PhpTypeInfoExtension.GetPhpTypeInfo<Command>()));

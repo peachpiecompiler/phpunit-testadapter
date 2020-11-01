@@ -1,20 +1,14 @@
 ﻿<Project Sdk="Peachpie.NET.Sdk">
-  
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
-  
   <ItemGroup>
     <Compile Include="**/*.php" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.6.1" />
   </ItemGroup>
-  
   <ItemGroup>
-    <ProjectReference Include="../../src/Peachpied.PhpUnit/Peachpied.PhpUnit.msbuildproj" />
-    <ProjectReference Include="../../src/Peachpied.PhpUnit.TestAdapter/Peachpied.PhpUnit.TestAdapter.csproj" />
+    <ProjectReference Include="..\..\src\PHPUnit.TestAdapter\PHPUnit.TestAdapter.csproj" />
   </ItemGroup>
-  
 </Project>

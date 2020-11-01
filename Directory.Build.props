@@ -1,7 +1,8 @@
 <Project>
 
   <PropertyGroup>
-    <PhpUnitVersion Condition="$(PhpUnitVersion) == ''">9.2.3</PhpUnitVersion>
+    <PhpUnitVersion Condition="$(PhpUnitVersion) == ''">9.2.6</PhpUnitVersion>
+    <VersionSuffix>preview3</VersionSuffix>
   </PropertyGroup>
 
 </Project>
