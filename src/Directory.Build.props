@@ -4,7 +4,7 @@
   
   <PropertyGroup>
     <VersionPrefix>$(PhpUnitVersion)</VersionPrefix>
-    <PackageOutputPath>$(MSBuildThisFileDirectory)../artifacts</PackageOutputPath>
+    <PackageOutputPath Condition=" '$(PackageOutputPath)'=='' ">$(MSBuildThisFileDirectory)../artifacts</PackageOutputPath>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 

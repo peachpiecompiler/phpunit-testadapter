@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Peachpie.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <NoWarn>PHP5012</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="**/*.php" />
