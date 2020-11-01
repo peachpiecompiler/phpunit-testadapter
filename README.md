@@ -43,7 +43,7 @@ The test project will be a .NET executable application (e.g. TargetFramework `ne
 
     Open the project in Visual Studio. Navigate to Test / Test Explorer, and continue by running or debugging the discovered tests.
 
-    ![test explorer](docs/testexplorer.png)
+    ![test explorer](https://github.com/peachpiecompiler/phpunit-testadapter/raw/master/docs/testexplorer.png)
     
 - On command line:
 

@@ -2,6 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
+    <Title>PHPUnit Test Adapter</Title>
+    <PackageDescription>PHPUnit VS Test Adapter for PeachPie/PHP Projects.</PackageDescription>
+    <PackageTags>phpunit;peachpie;testadapter;vstest;debug;profile;msbuild</PackageTags>
+    <Company]>iolevel</Company>
+    <Authors></Authors>
     <NoWarn>NU1603</NoWarn>
   </PropertyGroup>
 
