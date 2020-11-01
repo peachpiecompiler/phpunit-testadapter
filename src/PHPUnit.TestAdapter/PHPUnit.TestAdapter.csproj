@@ -6,7 +6,7 @@
     <PackageDescription>PHPUnit VS Test Adapter for PeachPie/PHP Projects.</PackageDescription>
     <PackageTags>phpunit;peachpie;testadapter;vstest;debug;profile;msbuild</PackageTags>
     <Company>iolevel</Company>
-    <Authors></Authors>
+    <Authors>iolevel</Authors>
     <NoWarn>NU1603</NoWarn>
   </PropertyGroup>
 
