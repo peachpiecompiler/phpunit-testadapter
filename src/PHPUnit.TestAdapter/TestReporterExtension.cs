@@ -24,19 +24,19 @@ namespace PHPUnit.TestAdapter
             _testRunContext = ctx.TryGetProperty<TestRunContext>() ?? throw new InvalidOperationException();
         }
 
-        public void executeBeforeTest([NotNull] string test) =>
+        public void executeBeforeTest(string test) =>
             _testRunContext.FrameworkHandle.RecordStart(GetTestCase(test));
 
-        public void executeAfterSuccessfulTest([NotNull] string test, double time) =>
+        public void executeAfterSuccessfulTest(string test, double time) =>
             ReportOutcome(test, TestOutcome.Passed, time: time);
 
-        public void executeAfterTestError([NotNull] string test, [NotNull] string message, double time) =>
+        public void executeAfterTestError(string test, string message, double time) =>
             ReportOutcome(test, TestOutcome.Failed, message, time);
 
-        public void executeAfterTestFailure([NotNull] string test, [NotNull] string message, double time) =>
+        public void executeAfterTestFailure(string test, string message, double time) =>
             ReportOutcome(test, TestOutcome.Failed, message, time);
 
-        public void executeAfterSkippedTest([NotNull] string test, [NotNull] string message, double time) =>
+        public void executeAfterSkippedTest(string test, string message, double time) =>
             ReportOutcome(test, TestOutcome.Skipped, message, time);
 
         private void ReportOutcome(string phpTestName, TestOutcome outcome, string message = null, double time = 0.0)

@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <PhpUnitVersion Condition="$(PhpUnitVersion) == ''">9.2.6</PhpUnitVersion>
-    <VersionSuffix>preview3</VersionSuffix>
+    <VersionSuffix>preview4</VersionSuffix>
     <PackageReadmePath>$(MSBuildThisFileDirectory)README.md</PackageReadmePath>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/peachpiecompiler/phpunit-testadapter</PackageProjectUrl>
