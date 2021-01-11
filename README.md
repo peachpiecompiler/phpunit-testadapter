@@ -28,7 +28,7 @@ The test project will be a .NET executable application (e.g. TargetFramework `ne
 </Project>
 ```
 
-**File structure**:
+### File structure
 
 ```text
 - src
@@ -39,7 +39,7 @@ The test project will be a .NET executable application (e.g. TargetFramework `ne
 - lib.msbuildproj
 ```
 
-**Usage**:
+### Usage
 
 - In Visual Studio:
 
