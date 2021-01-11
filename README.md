@@ -16,14 +16,14 @@ The test project will be a .NET executable application (e.g. TargetFramework `ne
 **`lib.msbuildproj`**:
 
 ```xml
-<Project Sdk="Peachpie.NET.Sdk/1.0.0-preview4">
+<Project Sdk="Peachpie.NET.Sdk/1.0.0-preview5">
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="**/*.php" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.6.1" />
-    <PackageReference Include="PHPUnit.TestAdapter" Version="9.2.6-preview4" />
+    <PackageReference Include="PHPUnit.TestAdapter" Version="9.2.6-preview5" />
   </ItemGroup>
 </Project>
 ```
