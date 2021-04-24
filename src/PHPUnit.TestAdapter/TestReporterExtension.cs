@@ -24,28 +24,28 @@ namespace PHPUnit.TestAdapter
             _testRunContext = ctx.TryGetProperty<TestRunContext>() ?? throw new InvalidOperationException();
         }
 
-        public void executeBeforeTest(string test) =>
-            _testRunContext.FrameworkHandle.RecordStart(GetTestCase(test));
+        public void executeBeforeTest(PhpString test) =>
+            _testRunContext.FrameworkHandle.RecordStart(GetTestCase(test.ToString()));
 
-        public void executeAfterSuccessfulTest(string test, double time) =>
+        public void executeAfterSuccessfulTest(PhpString test, double time) =>
             ReportOutcome(test, TestOutcome.Passed, time: time);
 
-        public void executeAfterTestError(string test, string message, double time) =>
+        public void executeAfterTestError(PhpString test, PhpString message, double time) =>
             ReportOutcome(test, TestOutcome.Failed, message, time);
 
-        public void executeAfterTestFailure(string test, string message, double time) =>
+        public void executeAfterTestFailure(PhpString test, PhpString message, double time) =>
             ReportOutcome(test, TestOutcome.Failed, message, time);
 
-        public void executeAfterSkippedTest(string test, string message, double time) =>
+        public void executeAfterSkippedTest(PhpString test, PhpString message, double time) =>
             ReportOutcome(test, TestOutcome.Skipped, message, time);
 
-        private void ReportOutcome(string phpTestName, TestOutcome outcome, string message = null, double time = 0.0)
+        private void ReportOutcome(PhpString phpTestName, TestOutcome outcome, PhpString message = default, double time = 0.0)
         {
-            var testCase = GetTestCase(phpTestName);
+            var testCase = GetTestCase(phpTestName.ToString());
             var testResult = new TestResult(testCase)
             {
                 Outcome = outcome,
-                ErrorMessage = message,
+                ErrorMessage = message.ToString(),
                 Duration = TimeSpan.FromSeconds(time),
             };
 
