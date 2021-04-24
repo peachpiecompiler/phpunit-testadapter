@@ -11,19 +11,19 @@ This all together allows to **run, debug, and profile** PHPUnit tests on top of 
 
 ## Sample project
 
-The test project will be a .NET executable application (e.g. TargetFramework `netcoreapp3.1`), compiling the test files (e.g. `tests/**.php`), and referencing the actual PeachPie/PHP application.
+The test project will be a .NET executable application (e.g. TargetFramework `net5.0`), compiling the test files (e.g. `tests/**.php`), and referencing the actual PeachPie/PHP application.
 
 **`lib.msbuildproj`**:
 
 ```xml
-<Project Sdk="Peachpie.NET.Sdk/1.0.0-preview5">
+<Project Sdk="Peachpie.NET.Sdk/1.0.5-preview7">
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="**/*.php" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.6.1" />
-    <PackageReference Include="PHPUnit.TestAdapter" Version="9.2.6-preview5" />
+    <PackageReference Include="PHPUnit.TestAdapter" Version="9.2.6-preview7" />
   </ItemGroup>
 </Project>
 ```
